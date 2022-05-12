@@ -46,6 +46,7 @@ body {
 .currency__base__choice {
     padding: 10px;
     border: 2px solid;
+    cursor: pointer;
 }
 
 .currency__converter {

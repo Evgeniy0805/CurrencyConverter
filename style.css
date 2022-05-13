@@ -21,7 +21,7 @@ body {
     margin-top: 50px;
 }
 
-.currency__current__wrapper {
+.currency__current-wrapper {
     width: 70%;
     display: flex;
     justify-content: space-around;
@@ -36,7 +36,7 @@ body {
     border: 2px solid
 }
 
-.currency__base__wrapper {
+.currency__base-wrapper {
     margin: 50px auto 0 auto;
     width: 50%;
     display: flex;
@@ -47,6 +47,22 @@ body {
     padding: 10px;
     border: 2px solid;
     cursor: pointer;
+}
+
+.currency__base__choice:hover {
+    background-color: #fff;    
+}
+
+.currency__base__choice:hover svg path {
+    fill: #000;
+}
+
+.currency__base__choice_active {
+    background-color: #fff;
+}
+
+.currency__base__choice_active svg path {
+    fill: #000;
 }
 
 .currency__converter {

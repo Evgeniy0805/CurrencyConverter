@@ -31,6 +31,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 this.currencyExchangeRate[`${element}`] = json.Valute[`${element}`];
             });
             this.initialCourses = JSON.parse(JSON.stringify(this.currencyExchangeRate));
+            this.convertCurrency();
             this.setExchangeRate();
           } else {
             alert("Ошибка HTTP: " + exchangeRate.status);
@@ -54,9 +55,11 @@ window.addEventListener('DOMContentLoaded', () => {
     
         convertCurrency() {
             const outputField = document.querySelector('#output'),
-                  inputField = document.querySelector('#input');
-    
-            outputField.textContent = +(inputField.textContent) * 72; 
+                  inputField = document.querySelector('#input'),
+                  toConvert = document.querySelector('#outputName');
+
+            outputField.textContent = (+(inputField.value) * 
+                                      (1 / +this.currencyExchangeRate[toConvert.textContent].Value)).toFixed(2); 
         }
     
         changeBaseCurrency() {
@@ -86,8 +89,11 @@ window.addEventListener('DOMContentLoaded', () => {
             });
             this.listAllCurrency.push(this.baseCurrency);
             this.baseCurrency = targetElement.dataset.base;
+            document.querySelector('#inputName').dataset.currency = this.baseCurrency;
             this.listAllCurrency = this.listAllCurrency.filter(element => element != this.baseCurrency);
             this.changeExchangeRate();
+            this.setConverterName();
+            this.convertCurrency();
             this.setOtherCurrancyName();
             this.setExchangeRate();
         }
@@ -104,15 +110,50 @@ window.addEventListener('DOMContentLoaded', () => {
             this.currencyExchangeRate[`${this.baseCurrency}`] = {
                 Value: 1};
         }
+
+        changeOutputValue() {
+            const arrowRight = document.querySelector('.currency__current-item__right'),
+                  arrowLeft = document.querySelector('.currency__current-item__left'),
+                  outputName = document.querySelector('#outputName');
+            let index = 0;
+
+                arrowRight.addEventListener('click', () => {
+                    if (index < this.listAllCurrency.length - 1) {
+                        index++; 
+                    } else {
+                        index = 0;
+                    }
+                    outputName.textContent = this.listAllCurrency[index];
+                    this.convertCurrency();
+                });
+
+                arrowLeft.addEventListener('click', () => {
+                    if (index > 0) {
+                        index--; 
+                    } else {
+                        index = this.listAllCurrency.length - 1;
+                    }
+                    outputName.textContent = this.listAllCurrency[index];
+                    this.convertCurrency();
+                });
+        }
+
+        changeInput() {
+            const input = document.querySelector('#input');
+
+            input.addEventListener('input', () => {
+                this.convertCurrency();
+            });
+        }
     }
     
     let converter = new convertCurrency(arrayCurrency, baseCurrency);
     converter.setOtherCurrancyName();
     converter.getExchangeRate();
     converter.setConverterName();
-    converter.convertCurrency();
     converter.changeBaseCurrency();
-
+    converter.changeOutputValue();
+    converter.changeInput();
 });
 
     
